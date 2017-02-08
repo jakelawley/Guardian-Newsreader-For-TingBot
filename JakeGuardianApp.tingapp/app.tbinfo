@@ -1,5 +1,6 @@
 {
-    "name": "",
-    "author": "",
-    "//": "For more information about this file, go to: http://docs.tingbot.com/reference/tingapp-format/"
+    "name": "Guardian Headlines",
+    "author": "Jake Lawley",
+    "caption": "Latest Headlines from the Guardian",
+    "background_color": "005689"
 }
