@@ -24,7 +24,7 @@ def get_data():
     global currentSection
     currentSection = sections[int(sectionsIndex)]
 
-    req = requests.get('http://content.guardianapis.com/search?q=' + currentSection + '&api-key=9570cf30-7bc8-4683-8069-0cea7b060980')
+    req = requests.get('http://content.guardianapis.com/search?q=' + currentSection + '&order-by=newest&api-key=9570cf30-7bc8-4683-8069-0cea7b060980')
     
     global jsonResp
     jsonResp = req.json()
@@ -35,29 +35,43 @@ def get_data():
 def refresh_feed():
     global webTitle
     webTitle = HTMLParser().unescape(jsonResp['response']['results'][resultsIndex]['webTitle'])
+    global webPublicationDate
+    webPublicationDate = HTMLParser().unescape(jsonResp['response']['results'][resultsIndex]['webPublicationDate'])
 
 
 ######################## BUTTONS ########################
 @right_button.press
-@left_button.press
 def on_right():
+    global resultsIndex
+    resultsIndex = resultsIndex +1
+    refresh_feed()
+    
+@left_button.press
+def on_left():
+    global resultsIndex
+    resultsIndex = resultsIndex -2
+    refresh_feed()
+    
+@midleft_button.press
+def on_midleft():
+    global sectionsIndex
+    sectionsIndex = int(sectionsIndex - 2)
+    get_data()
+    
+@midright_button.press
+def on_midright():
     global sectionsIndex
     sectionsIndex = int(sectionsIndex + 1)
     get_data()
     
-@left_button.press
-def on_left():
-    global sectionsIndex
-    sectionsIndex = int(sectionsIndex - 2)
-    get_data()
-
 ######################## BUTTONS ########################
 
 @every(seconds=1.0/30)
 def loop():
     # SETUP UI
     screen.fill(color=(0,86,137))
-    screen.text(webTitle, color='white', font_size=16, xy=(160, 50), align='top', max_lines=2, max_width=260)
+    screen.text(webTitle, color='white', font_size=16, xy=(160, 50), align='top', max_lines=3, max_width=260)
     screen.text(currentSection,align='topleft', xy=(5,5), font_size=12)
+    screen.text('Published - ' + webPublicationDate, color='white', align='bottom', font_size=12)
 
 tingbot.run()
