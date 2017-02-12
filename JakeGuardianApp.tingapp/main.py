@@ -16,6 +16,7 @@ webPublicationDateFormatted = ''
 webUrl = ''
 resultsIndex = 0
 sectionsIndex = 0
+error = False
 ######################## GLOBALS ########################
 
 # make call
@@ -97,13 +98,15 @@ def on_midright():
 
 @every(seconds=1.0/30)
 def loop():
-    # SETUP UI
-    screen.brightness = 100
-    screen.fill(color=(0,86,137))
-    screen.text(webTitle, color='white', font_size=17, xy=(160, 50), align='top', max_lines=5, max_width=320)
-    screen.text(currentSection,align='topleft', xy=(5,5), font_size=13)
-    pageSize = tingbot.app.settings['PageSize']
-    screen.text(str(resultsIndex+1) + ' of ' + str(pageSize), align='topright', font_size=13, xy=(310,5))
-    screen.text('Published - ' + webPublicationDateFormatted, color='white', align='bottom', font_size=13)
+    if error:
+        screen.image('NoResultsFound.png')
+    else:
+        screen.brightness = 100
+        screen.fill(color=(0,86,137))
+        screen.text(webTitle, color='white', font_size=17, xy=(160, 50), align='top', max_lines=5, max_width=320)
+        screen.text(currentSection,align='topleft', xy=(5,5), font_size=13)
+        pageSize = tingbot.app.settings['PageSize']
+        screen.text(str(resultsIndex+1) + ' of ' + str(pageSize), align='topright', font_size=13, xy=(310,5))
+        screen.text('Published - ' + webPublicationDateFormatted, color='white', align='bottom', font_size=13)
 
 tingbot.run()
